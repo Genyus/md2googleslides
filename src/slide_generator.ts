@@ -23,6 +23,7 @@ import {OAuth2Client} from 'google-auth-library';
 import probeImage from './images/probe';
 import maybeGenerateImage from './images/generate';
 import assert from 'assert';
+import pThrottle from 'p-throttle';
 
 const debug = Debug('md2gslides');
 
@@ -206,7 +207,11 @@ export default class SlideGenerator {
       }
       image.url = await uploadLocalImage(parsedUrl.pathname);
     };
-    return this.processImages(uploadImageifLocal);
+    const throttle = pThrottle({
+      limit: 8,
+      interval: 1000,
+    });
+    return this.processImages(throttle(uploadImageifLocal));
   }
 
   /**
