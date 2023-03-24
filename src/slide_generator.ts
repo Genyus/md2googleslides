@@ -208,7 +208,7 @@ export default class SlideGenerator {
       image.url = await uploadLocalImage(parsedUrl.pathname);
     };
     const throttle = pThrottle({
-      limit: 8,
+      limit: 6,
       interval: 1000,
     });
     return this.processImages(throttle(uploadImageifLocal));
